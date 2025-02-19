@@ -1,13 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import "./ExpenseTracker.css"; // Import external CSS file
 
 export default function ExpenseTracker() {
   const [expenses, setExpenses] = useState([]);
   const [newExpense, setNewExpense] = useState({ name: "", amount: "", quantity: "" });
-  const [editingExpense, setEditingExpense] = useState(null);
+  const [editingExpense, setEditingExpense] = useState(null); // Store expense being edited
 
-  // Fetch Expenses
+  // ✅ Fetch expenses from Flask API
   const getExpenses = async () => {
     try {
       const res = await fetch("http://127.0.0.1:5000/expense");
@@ -18,7 +17,7 @@ export default function ExpenseTracker() {
     }
   };
 
-  // Add Expense
+  // ✅ Add a new expense
   const addExpense = async () => {
     try {
       const res = await fetch("http://127.0.0.1:5000/expense", {
@@ -27,15 +26,15 @@ export default function ExpenseTracker() {
         body: JSON.stringify(newExpense),
       });
       if (res.ok) {
-        setNewExpense({ name: "", amount: "", quantity: "" });
-        getExpenses();
+        setNewExpense({ name: "", amount: "", quantity: "" }); // Clear form
+        getExpenses(); // Refresh list
       }
     } catch (error) {
       console.error("Error adding expense:", error);
     }
   };
 
-  // Update Expense
+  // ✅ Update an existing expense
   const updateExpense = async () => {
     if (!editingExpense) return;
 
@@ -47,56 +46,57 @@ export default function ExpenseTracker() {
       });
 
       if (res.ok) {
-        setEditingExpense(null);
-        getExpenses();
+        setEditingExpense(null); // Clear editing state
+        getExpenses(); // Refresh list
       }
     } catch (error) {
       console.error("Error updating expense:", error);
     }
   };
 
-  // Delete Expense
+  // ✅ Delete an expense
   const deleteExpense = async (id) => {
     try {
       await fetch(`http://127.0.0.1:5000/expense/${id}`, { method: "DELETE" });
-      getExpenses();
+      getExpenses(); // Refresh list
     } catch (error) {
       console.error("Error deleting expense:", error);
     }
   };
 
+  // ✅ Load expenses on component mount
   useEffect(() => {
     getExpenses();
   }, []);
 
   return (
-    <div className="container">
+    <div>
       <h1>Expense Tracker</h1>
 
-      <div className="form">
-        <input
-          type="text"
-          placeholder="Expense Name"
-          value={newExpense.name}
-          onChange={(e) => setNewExpense({ ...newExpense, name: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Amount"
-          value={newExpense.amount}
-          onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Quantity"
-          value={newExpense.quantity}
-          onChange={(e) => setNewExpense({ ...newExpense, quantity: e.target.value })}
-        />
-        <button className="add-btn" onClick={addExpense}>Add Expense</button>
-      </div>
+      {/* Input Fields for Adding */}
+      <input
+        type="text"
+        placeholder="Expense Name"
+        value={newExpense.name}
+        onChange={(e) => setNewExpense({ ...newExpense, name: e.target.value })}
+      />
+      <input
+        type="number"
+        placeholder="Amount"
+        value={newExpense.amount}
+        onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
+      />
+      <input
+        type="number"
+        placeholder="Quantity"
+        value={newExpense.quantity}
+        onChange={(e) => setNewExpense({ ...newExpense, quantity: e.target.value })}
+      />
+      <button onClick={addExpense}>Add Expense</button>
 
+      {/* Input Fields for Updating */}
       {editingExpense && (
-        <div className="edit-section">
+        <div>
           <h3>Editing Expense</h3>
           <input
             type="number"
@@ -110,19 +110,18 @@ export default function ExpenseTracker() {
             value={editingExpense.quantity}
             onChange={(e) => setEditingExpense({ ...editingExpense, quantity: e.target.value })}
           />
-          <button className="update-btn" onClick={updateExpense}>Update</button>
-          <button className="cancel-btn" onClick={() => setEditingExpense(null)}>Cancel</button>
+          <button onClick={updateExpense}>Update Expense</button>
+          <button onClick={() => setEditingExpense(null)}>Cancel</button>
         </div>
       )}
 
-      <ul className="expense-list">
+      {/* Display Expenses */}
+      <ul>
         {expenses.map((expense) => (
           <li key={expense.id}>
-            <span>{expense.name} - ${expense.amount} x {expense.quantity}</span>
-            <div>
-              <button className="edit-btn" onClick={() => setEditingExpense(expense)}>✏️ Edit</button>
-              <button className="delete-btn" onClick={() => deleteExpense(expense.id)}>❌ Delete</button>
-            </div>
+            {expense.name} - ${expense.amount} x {expense.quantity}
+            <button onClick={() => deleteExpense(expense.id)}>❌ Delete</button>
+            <button onClick={() => setEditingExpense(expense)}>✏️ Edit</button>
           </li>
         ))}
       </ul>

@@ -1,0 +1,74 @@
+.container {
+    width: 50%;
+    margin: auto;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    color: #333;
+  }
+  
+  .form {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  button {
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .add-btn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .edit-btn {
+    background-color: #ffc107;
+    color: black;
+  }
+  
+  .delete-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .update-btn {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .cancel-btn {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .expense-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .expense-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+    border-radius: 5px;
+  }
+  
+  .edit-section {
+    margin-bottom: 20px;
+  }
+  
